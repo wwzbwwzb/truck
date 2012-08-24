@@ -4,25 +4,15 @@ function run_setup_once ()
 	git config --global color.ui true
 }
 
-export a=
-export b=
-export c=/home/gwj/truck/android/jb-dev
-export d=
-export t=
-export l=/home/gwj/truck/android/common
-export api=$c/vs/ApiDemos
-export svn=/nfs/svn/Android-X86-BSP/trunk/Android-4.0-x86/EITX3002/Document/
-export vlc=/mnt/sdc4/xbmctv/vlc
-export nfs="/nfs/security/LiteView_Os_Image/trunk/document/"
-export cg=/mnt/sdc4/xbmctv/cg
 
-
-alias lls='ls --color' 
+# for editor
 alias em='emacs -nw -q'
 alias cs='cscope -d '
 alias vt='vi -t '
 alias gp='grep -Irn '
 alias b='[ -z "`lsmod | grep pcspkr`" ] && sudo modprobe pcspkr; beep -f 1000 -l 500'
+unalias ls # remove previous definition
+alias lls='ls --color' 
 
 function gi()
 {
@@ -33,15 +23,16 @@ else
 fi
 }
 
-echo  "---------------welcome to new world---------\n" 
+
+#for debug env
 export DISPLAY=:0.0 
 
 #for vlc player
-export VLC_PLUGIN_PATH=/mnt/sdc4/truck/vlc/vlc4android/inst/lib
+#export VLC_PLUGIN_PATH=/mnt/sdc4/truck/vlc/vlc4android/inst/lib
 #SUDO_UID=
 #VLC_DATA_PATH=
 #XDG_CONFIG_HOME
-VLC_VERBOSE=5
+#VLC_VERBOSE=5
 #http_proxy
 #XDG_SESSION_COOKIE
 
@@ -51,6 +42,8 @@ VLC_VERBOSE=5
 function env_my(){
 	echo a;
 }
+
+# for build gcc
 export PKG_CONFIG_PATH=/home/gwj/share/lib/pkgconfig/:/home/gwj/share/share/pkgconfig
 export C_INCLUDE_PATH=/home/gwj/share/include:/mnt/sdb1/nfs/tests/glx/drm:/mnt/sdb1/nfs/tests/glx/drm/nouveau
 export CPATH=/home/gwj/share
@@ -58,47 +51,25 @@ export CPATH=/home/gwj/share
 export CPLUS_INCLUDE_PATH=/home/gwj/share/include
 export CPP_INCLUDE_PATH=/home/gwj/share/include
 export LIBRARY_PATH=/home/gwj/share/lib/
+
+#for EGL debug
 export EGL_DRIVER=/home/gwj/share/lib/egl/egl_glx.so
 export EGL_DRIVER=$cg/mesa/lib/egl/egl_gallium.so
 export EGL_DRIVERS_PATH=/home/gwj/share/lib/egl/
 export EGL_LOG_LEVEL=debug #debug fatal error
 export EGL_PLATFORM=devfb  #x11 drm 
 export LIBGL_DEBUG=verbose
-export LD_LIBRARY_PATH=/lib:/usr/lib/:/home/gwj/share/lib/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gwj/share/lib/
 # this cause file error
  
-DDISK=/mnt/sdc4
 #export JAVA_HOME=/usr/lib/jvm/java-6-sun 
 export JAVA_HOME=/home/gwj/truck/android/tool/jdk1.6.0_33
 export CLASSPATH=$CLASSPATH:.
-export GTK_IM_MODULE=ibus
-export XMODIFIERS=@im=ibus
-export QT_IM_MODULE=ibus
-
-function sudo_itool()
-{
-sudo modprobe pcspkr && beep
-}
 
 AND_PATH=/mnt/sdc4/android/ics/src/prebuilt/linux-x86/toolchain/i686-android-linux-4.4.3/bin/
 AND_TOOL_PATH=/mnt/sdc4/android/ics/src/out/host/linux-x86/bin
 export PATH=$PATH:
-#export PATH=/home/gwj/share/bin:$PATH:
 export PATH=$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:~/share/bin
-#export PATH=$PATH:$AND_TOOL_PATH
-
-
-function f()
-{
-	ls
-	find
-}
-
-function nemacs()
-{
-	export -n DISPLAY
-	emacs $@
-}
 
 alias adb-install="adb connect 192.168.0.10:5555;adb install"
 alias adb-logcat="adb connect 192.168.0.10:5555;adb logcat"
@@ -119,3 +90,16 @@ function make_cs_under_here()
 	cscope -bqR
 }
 
+export a=
+export b=
+export c=/home/gwj/truck/android/jb-dev
+export d=
+export t=
+export nfs=
+export svn=
+export l=/home/gwj/truck/android/common
+export vlc=
+export cg=
+
+
+echo  "---------------welcome to new world---------\n" 
