@@ -1,0 +1,5 @@
+
+1. define graphic steps in init as to manage it properly
+2. Xorg only start once in a system start up. 
+3. Xorg will not depend on VT, use fb instead.
+4. 
