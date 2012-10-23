@@ -1,3 +1,12 @@
+
+2012-10-19
+	via exchange server info: 
+		exchsg04.s3graphics.com
+		user: Johney Guo
+		sec: kerbero/NTLM
+
+		
+
 2012-08-25
 	I found another interesting work models:
 		http://www.linuxdeepin.com/
