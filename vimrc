@@ -11,15 +11,16 @@ set display=lastline
 set mouse=a
 syntax on
 set nu
+map <F1> :f
 map <F6> :set nu!<CR>
 map <F7> :set list!<CR>
-map <F7> :set wrap!<CR>
+map <F8> :set wrap!<CR>
+map <F9> :make
+map <F10> :cw
+
 "set list
 " for compile android 4.0
 set makeprg={\ cd\ $c;\ .\ build/envsetup.sh;\ cd\ -;\ TOP=$c;\ mm\ ;beep;\ }
-map <F1> :f
-map <F9> :make
-map <F10> :cw
 
 " shift tab pages, can't use in putty
 map <S-left> :tabp
@@ -56,13 +57,6 @@ map q :q<CR>
 
 set mouse=a
 set incsearch
-
-" use make to find errors and warnnings 
-
-set nu!
-set nu
-":map <F3> :vs /home/gwj/docs.txt <CR>
-
 set hlsearch
 set cindent
 set autoindent
@@ -71,14 +65,6 @@ map <F4> zf%
 map <F5> zo
 map T :r! date \+\%F<CR>o<Tab>
 
-
-set nu!
-set nu
-":map <F3> :vs /home/gwj/docs.txt <CR>
-
-set hlsearch
-set cindent
-set autoindent
 
 if has("cscope")
 "		set csprg=/usr/local/bin/cscope

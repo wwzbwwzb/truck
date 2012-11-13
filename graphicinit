@@ -1,0 +1,27 @@
+
+1. define graphic steps in init as to manage it properly
+2. Xorg only start once in a system start up. 
+3. Xorg will not depend on VT, use fb instead.
+4. 
+
+
+===modern X-win-system
+1. display manager: 
+	startup xserver xclient, 
+2. session manager:
+	friendly startup obligtory application for user
+3. xserver
+	to be blamed to composite layers 
+
+4. some useful xapps:
+xmessage : can send message to Display, the same as notify-send
+xeyes			can test application and cursor test
+
+
+===search engine collection
+http://www.google.com.tw/search?&q=$key
+http://www.baidu.com/s?wd=$key
+http://music.baidu.com/search?key=$key
+http://www.douban.com/search?search_text=$key
+http://www.amazon.com/s/&field-keywords=$key
+
