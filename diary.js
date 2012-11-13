@@ -1,3 +1,27 @@
+
+2012-11-08
+  date will not set the hardware rtc, instead hwclock -w do it
+  hwclock -r #show time
+  hwclock -w #set hw rtc time with systemtime
+  hwclock -s #set systemtime with hw rtc time
+  tzselect select the default timezone
+2012-11-02
+  update-usbids 可以更新usbutils 中usb.ids . 地址：http://www.linux-usb.org/usb.ids
+  update-pciids  更新pci ids
+
+  a gress shutdown command sequence:
+    umount -a -f -l 
+    sync
+    reboot -f
+  awesome+i915 运行三天终于不行了，gpuhang错误。
+
+2012-11-01
+	android depend:
+	sudo apt-get install git-core gnupg flex bison gperf build-essential \
+		  zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev \
+			  libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 \
+				  libgl1-mesa-dev g++-multilib mingw32 openjdk-6-jdk tofrodos \
+					  python-markdown libxml2-utils xsltproc zlib1g-dev:i386
 2012-08-25
 	I found another interesting work models:
 		http://www.linuxdeepin.com/
