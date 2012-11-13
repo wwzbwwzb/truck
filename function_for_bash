@@ -11,7 +11,7 @@ alias cs='cscope -d '
 alias vt='vi -t '
 alias gp='grep -Irn '
 alias b='[ -z "`lsmod | grep pcspkr`" ] && sudo modprobe pcspkr; beep -f 1000 -l 500'
-unalias ls # remove previous definition
+#unalias ls # remove previous definition
 alias lls='ls --color' 
 
 function gi()
@@ -25,7 +25,7 @@ fi
 
 
 #for debug env
-export DISPLAY=:0.0 
+#export DISPLAY=:0.0 
 
 #for vlc player
 #export VLC_PLUGIN_PATH=/mnt/sdc4/truck/vlc/vlc4android/inst/lib
@@ -44,32 +44,36 @@ function env_my(){
 }
 
 # for build gcc
-export PKG_CONFIG_PATH=/home/gwj/share/lib/pkgconfig/:/home/gwj/share/share/pkgconfig
-export C_INCLUDE_PATH=/home/gwj/share/include:/mnt/sdb1/nfs/tests/glx/drm:/mnt/sdb1/nfs/tests/glx/drm/nouveau
-export CPATH=/home/gwj/share
+load_share() {
+	export PKG_CONFIG_PATH=/home/gwj/share/lib/pkgconfig/:/home/gwj/share/share/pkgconfig
+	export C_INCLUDE_PATH=/home/gwj/share/include:/mnt/sdb1/nfs/tests/glx/drm:/mnt/sdb1/nfs/tests/glx/drm/nouveau
+	export CPATH=/home/gwj/share
 #export C_INCLUDE_PATH=/home/gwj/share/include/libdrm
-export CPLUS_INCLUDE_PATH=/home/gwj/share/include
-export CPP_INCLUDE_PATH=/home/gwj/share/include
-export LIBRARY_PATH=/home/gwj/share/lib/
+	export CPLUS_INCLUDE_PATH=/home/gwj/share/include
+	export CPP_INCLUDE_PATH=/home/gwj/share/include
+	export LIBRARY_PATH=/home/gwj/share/lib/
+	export LD_LIBRARY_PATH=/home/gwj/share/lib/:$LD_LIBRARY_PATH:
+}
 
 #for EGL debug
-export EGL_DRIVER=/home/gwj/share/lib/egl/egl_glx.so
-export EGL_DRIVER=$cg/mesa/lib/egl/egl_gallium.so
-export EGL_DRIVERS_PATH=/home/gwj/share/lib/egl/
-export EGL_LOG_LEVEL=debug #debug fatal error
-export EGL_PLATFORM=devfb  #x11 drm 
-export LIBGL_DEBUG=verbose
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/gwj/share/lib/
+debug_egl(){
+	export EGL_DRIVER=/home/gwj/share/lib/egl/egl_glx.so
+	export EGL_DRIVER=$cg/mesa/lib/egl/egl_gallium.so
+	export EGL_DRIVERS_PATH=/home/gwj/share/lib/egl/
+	export EGL_LOG_LEVEL=debug #debug fatal error
+	export EGL_PLATFORM=devfb  #x11 drm 
+	export LIBGL_DEBUG=verbose
+}
 # this cause file error
  
 #export JAVA_HOME=/usr/lib/jvm/java-6-sun 
-export JAVA_HOME=/home/gwj/truck/android/tool/jdk1.6.0_33
+export JAVA_HOME=/mnt/sdc4/android/ics/tool/jdk1.6.0_21
 export CLASSPATH=$CLASSPATH:.
 
 AND_PATH=/mnt/sdc4/android/ics/src/prebuilt/linux-x86/toolchain/i686-android-linux-4.4.3/bin/
 AND_TOOL_PATH=/mnt/sdc4/android/ics/src/out/host/linux-x86/bin
 export PATH=$PATH:
-export PATH=$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:~/share/bin
+export PATH=~/share/bin:$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:
 
 alias adb-install="adb connect 192.168.0.10:5555;adb install"
 alias adb-logcat="adb connect 192.168.0.10:5555;adb logcat"
@@ -90,16 +94,51 @@ function make_cs_under_here()
 	cscope -bqR
 }
 
-export a=
-export b=
-export c=/home/gwj/truck/android/jb-dev
-export d=
-export t=
-export nfs=
-export svn=
-export l=/home/gwj/truck/android/common
-export vlc=
-export cg=
+ function anim () { animate -delay 50  -loop 1  -resize 200x300  $@; }
+alias mvlc="vlc --play-and-exit --no-loop -I dummy "
 
+ainstall()
+{
+  sudo apt-get install $@
+  echo "`date +%F-%R`install $@" >> /home/gwj/.apt.log
+}
 
-echo  "---------------welcome to new world---------\n" 
+gentags()
+{
+  echo "generate tags..."
+( find . -name "*.[ch]"; find . -name "*.cpp" )  | ctags  -L -
+  echo "generate cscope..."
+( find . -name "*.[ch]"; find . -name "*.cpp"; find . -name "*.java" ;find . -name "*.aidl" ;   )  | cscope -bR -i-
+}
+
+run()
+{
+ eval ulimit -c unlimited
+ $@
+ [ -e "core" ] && gdb -c core -batch 
+# eval ulimit -c 0
+}
+
+load_android()
+{
+  cd $c; source ./build/envsetup.sh; 
+  cd -
+}
+
+export c=/mnt/sdc4/android/ics/jb-dev
+export t=$c/out/debug/target/product/tina/system
+export ANDROID_SWT=$c/out/host/linux-x86/framework
+export TOP=$c
+export l=/mnt/sdc4/android/ics/common
+export x=/mnt/sdc4/xbmctv/cg/xserver
+export lua=/mnt/sdc4/truck/lua
+export LUA_CPATH=/home/gwj/share/lib/lua/5.2/?.so
+export LUA_PATH=/home/gwj/share/share/lua/5.2/?.lua
+
+#export v=/mnt/sdc4/xbmctv/tv/v4l-utils-0.8.5
+export m=/mnt/sdc4/xbmctv/cg/mesa
+export TERM=xterm-color
+#export LANG=en_US.utf-8
+#export LC_ALL=en_US.utf-8
+#export LANGUAGE=en_US.utf-8
+
