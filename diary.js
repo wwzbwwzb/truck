@@ -1,4 +1,9 @@
 
+2012-12-01
+	to Enable ssh as sock5 server:
+	ssh -qTfnN -D 7070 hellobaby@216.194.70.6
+2012-11-13
+	xprop  xtrace 有发现一个很不错调试xwin的工具，xprop可以通过鼠标获取窗口的参数。
 2012-11-08
   date will not set the hardware rtc, instead hwclock -w do it
   hwclock -r #show time
