@@ -5,15 +5,6 @@ function run_setup_once ()
 }
 
 
-# for editor
-alias em='emacs -nw -q'
-alias cs='cscope -d '
-alias vt='vi -t '
-alias gp='grep -Irn '
-alias b='[ -z "`lsmod | grep pcspkr`" ] && sudo modprobe pcspkr; beep -f 1000 -l 500'
-#unalias ls # remove previous definition
-alias lls='ls --color' 
-
 function gi()
 {
 if [  -z "$2" ] ;then
@@ -45,6 +36,8 @@ function env_my(){
 
 # for build gcc
 load_share() {
+  export PREFIX=/home/gwj/share/
+  export prefix=$PREFIX
 	export PKG_CONFIG_PATH=/home/gwj/share/lib/pkgconfig/:/home/gwj/share/share/pkgconfig
 	export C_INCLUDE_PATH=/home/gwj/share/include:/mnt/sdb1/nfs/tests/glx/drm:/mnt/sdb1/nfs/tests/glx/drm/nouveau
 	export CPATH=/home/gwj/share
@@ -56,48 +49,22 @@ load_share() {
 }
 
 #for EGL debug
-debug_egl(){
+load_egl(){
 	export EGL_DRIVER=/home/gwj/share/lib/egl/egl_glx.so
 	export EGL_DRIVER=$cg/mesa/lib/egl/egl_gallium.so
 	export EGL_DRIVERS_PATH=/home/gwj/share/lib/egl/
 	export EGL_LOG_LEVEL=debug #debug fatal error
-	export EGL_PLATFORM=devfb  #x11 drm 
+	export EGL_PLATFORM=fbdev  #x11 drm 
 	export LIBGL_DEBUG=verbose
 }
 # this cause file error
- 
-#export JAVA_HOME=/usr/lib/jvm/java-6-sun 
-export JAVA_HOME=/mnt/sdc4/android/ics/tool/jdk1.6.0_21
-export CLASSPATH=$CLASSPATH:.
-
-AND_PATH=/mnt/sdc4/android/ics/src/prebuilt/linux-x86/toolchain/i686-android-linux-4.4.3/bin/
-AND_TOOL_PATH=/mnt/sdc4/android/ics/src/out/host/linux-x86/bin
-export PATH=$PATH:
-export PATH=~/share/bin:$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:
-
-alias adb-install="adb connect 192.168.0.10:5555;adb install"
-alias adb-logcat="adb connect 192.168.0.10:5555;adb logcat"
-function adb-shell()
+adb-shell()
 {
 	adb connect 192.168.0.10
 	adb shell $@
 }
 
-function make_cs_under_here()
-{
-	find . -name "*.h" >> cscope.file
-	find . -name "*.cpp" >> cscope.file
-	find . -name "*.cc" >> cscope.file
-	find . -name "*.java" >> cscope.file
-	find . -name "*.hh" >> cscope.file
-	find . -name "*.mk" >> cscope.file
-	cscope -bqR
-}
-
- function anim () { animate -delay 50  -loop 1  -resize 200x300  $@; }
-alias mvlc="vlc --play-and-exit --no-loop -I dummy "
-
-ainstall()
+aptinstall()
 {
   sudo apt-get install $@
   echo "`date +%F-%R`install $@" >> /home/gwj/.apt.log
@@ -106,9 +73,9 @@ ainstall()
 gentags()
 {
   echo "generate tags..."
-( find . -name "*.[ch]"; find . -name "*.cpp" )  | ctags  -L -
+( find $1 -name "*.[ch]";  find . -name "*.[ch]"; find . -name "*.cpp" )  | ctags  -L -
   echo "generate cscope..."
-( find . -name "*.[ch]"; find . -name "*.cpp"; find . -name "*.java" ;find . -name "*.aidl" ;   )  | cscope -bR -i-
+( find $1 -name "*.[ch]";  find . -name "*.[ch]"; find . -name "*.cpp"; find . -name "*.java" ;find . -name "*.aidl" ;   )  | cscope -bR -i-
 }
 
 run()
@@ -121,24 +88,76 @@ run()
 
 load_android()
 {
-  cd $c; source ./build/envsetup.sh; 
-  cd -
-}
+
+#export JAVA_HOME=/usr/lib/jvm/java-6-sun 
+export JAVA_HOME=/mnt/sdc4/android/ics/tool/jdk1.6.0_21
+export CLASSPATH=$CLASSPATH:.
+
+AND_PATH=/mnt/sdc4/android/ics/src/prebuilt/linux-x86/toolchain/i686-android-linux-4.4.3/bin/
+AND_TOOL_PATH=/mnt/sdc4/android/ics/src/out/host/linux-x86/bin
+export PATH=$PATH:
+export PATH=~/share/bin:$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:
+#export PATH=$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:~/share/bin:
 
 export c=/mnt/sdc4/android/ics/jb-dev
-export t=$c/out/debug/target/product/tina/system
+export t=$c/out/debug/target/product/tina/symbols/system/bin
 export ANDROID_SWT=$c/out/host/linux-x86/framework
 export TOP=$c
+
+cd $c; source ./build/envsetup.sh >>/dev/null >>/dev/null; 
+cd - >>/dev/null
+echo "loading ...."
+}
+
+apt-install()
+{
+  [ -z "$@" ] && exit
+  echo "[`date +%F`] $@" >> /home/gwj/apt.log
+  sudo apt-get install $@
+}
+
+anim () 
+{ 
+  animate -delay 50  -loop 1  -resize 200x300  $@; 
+}
+
+alias mvlc="vlc --play-and-exit --no-loop -I dummy "
+ # for editor
+alias em='emacs -nw -q'
+alias cs='cscope -d '
+alias vt='vi -t '
+alias gp='grep -Irn '
+alias b='[ -z "`lsmod | grep pcspkr`" ] && sudo modprobe pcspkr; beep -f 1000 -l 500'
+#unalias ls # remove previous definition
+alias lls='ls --color' 
+
+
+alias adb-install="adb connect 192.168.0.10:5555;adb install"
+alias adb-logcat="adb connect 192.168.0.10:5555;adb logcat"
+
 export l=/mnt/sdc4/android/ics/common
 export x=/mnt/sdc4/xbmctv/cg/xserver
+export cg=/mnt/sdc4/xbmctv/cg/xserver/
+
+#for lua
 export lua=/mnt/sdc4/truck/lua
-export LUA_CPATH=/home/gwj/share/lib/lua/5.2/?.so
-export LUA_PATH=/home/gwj/share/share/lua/5.2/?.lua
+export LUA_CPATH="?.so;/home/gwj/share/lib/lua/5.2/?.so"
+export LUA_PATH="?.lua;/home/gwj/share/share/lua/5.2/?.lua"
+
+#for node
+export NODE_PATH=/home/gwj/share/lib/node_modules
+npminstall()
+{
+  echo [`date +%F`] $@ >> /home/gwj/npminstall.log
+  npm -g install $@
+}
 
 #export v=/mnt/sdc4/xbmctv/tv/v4l-utils-0.8.5
 export m=/mnt/sdc4/xbmctv/cg/mesa
+export a=/mnt/sdc4/truck/mali/kernel
 export TERM=xterm-color
 #export LANG=en_US.utf-8
 #export LC_ALL=en_US.utf-8
 #export LANGUAGE=en_US.utf-8
 
+[ -z "$GDMSESSION" ] || load_android
