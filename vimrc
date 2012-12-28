@@ -8,14 +8,26 @@ set tags=tags
 set display=lastline
 "set autochdir
 
+" define the color of Comment
+"hi Comment  term=bold ctermfg=6 guifg=Blue
+hi Identifier ctermfg=LightBlue  
+hi Comment  ctermfg=yellow
+
+" from chia-I
+"colorscheme delek
+"set pt=<F9>
+set copyindent
+let c_space_errors=1
+au  FileType python  set sw=4 sts=4 et
+au  FileType lua     set sw=4 sts=4 et
+
 set mouse=a
 syntax on
 set nu
 " can't edit makefile
 set sw=2
 set ts=2
-"set expandtab
-set et
+"set expandtab set et
 set encoding=utf-8
 set incsearch
 set hlsearch
@@ -56,11 +68,6 @@ map K :cp<CR>
 map O :cl!<CR>
 map L :cc!<CR>
 map q :q<CR>
-
-" define the color of Comment
-"hi Comment  term=bold ctermfg=6 guifg=Blue
-hi Identifier ctermfg=LightBlue  
-hi Comment  ctermfg=4
 
 if has("cscope")
 "		set csprg=/usr/local/bin/cscope

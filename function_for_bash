@@ -73,9 +73,9 @@ aptinstall()
 gentags()
 {
   echo "generate tags..."
-( find . -name "*.[ch]"; find . -name "*.cpp" )  | ctags  -L -
+( find $1 -name "*.[ch]";  find . -name "*.[ch]"; find . -name "*.cpp" )  | ctags  -L -
   echo "generate cscope..."
-( find . -name "*.[ch]"; find . -name "*.cpp"; find . -name "*.java" ;find . -name "*.aidl" ;   )  | cscope -bR -i-
+( find $1 -name "*.[ch]";  find . -name "*.[ch]"; find . -name "*.cpp"; find . -name "*.java" ;find . -name "*.aidl" ;   )  | cscope -bR -i-
 }
 
 run()
@@ -154,6 +154,7 @@ npminstall()
 
 #export v=/mnt/sdc4/xbmctv/tv/v4l-utils-0.8.5
 export m=/mnt/sdc4/xbmctv/cg/mesa
+export a=/mnt/sdc4/truck/mali/kernel
 export TERM=xterm-color
 #export LANG=en_US.utf-8
 #export LC_ALL=en_US.utf-8
