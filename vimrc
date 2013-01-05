@@ -1,8 +1,35 @@
 "2012-08-24
 set viminfo='1000,f1,<500
 
+
+"显示函数名称，c/java
+" set verbose=9 可以调试命令
+fun! ShowFuncName()
+	let lnum = line(".")
+	let col = col(".")
+	echohl ModeMsg
+" for c
+  if &filetype == "c" || &filetype == "cpp"
+	  echo getline(search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW')) 
+" for java
+	elseif  &filetype == "java"
+  	echo getline(search("\\h\\+\\s\\+\\h\\+\\s*(.*)", 'bW')) 
+  else
+	  echo getline(search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW')) 
+	endif
+	echohl None
+"	call search("\\%" . lnum . "l" . "\\%" . col . "c")
+	call cursor(lnum,col)
+endfun
+
+map <F12> :call  ShowFuncName() <CR>
+au  CursorMoved *    call  ShowFuncName()
+
+
+
 "2010-10-09
 "------------------------------------------------
+"对长行使用gk  gj 跳转
 set tags=tags
 "display lone line friendly
 set display=lastline
@@ -18,6 +45,7 @@ hi Comment  ctermfg=yellow
 "set pt=<F9>
 set copyindent
 let c_space_errors=1
+
 au  FileType python  set sw=4 sts=4 et
 au  FileType lua     set sw=4 sts=4 et
 
