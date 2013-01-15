@@ -1,3 +1,5 @@
+# return if not in interactive mode
+[ -z "$PS1" ] && return
 #once 
 function run_setup_once ()
 {
@@ -73,6 +75,7 @@ aptinstall()
 gentags()
 {
   echo "generate tags..."
+#--c++-kinds=+p --fields=+iaS --extra=+q
 ( find $1 -name "*.[ch]";  find . -name "*.[ch]"; find . -name "*.cpp" )  | ctags  -L -
   echo "generate cscope..."
 ( find $1 -name "*.[ch]";  find . -name "*.[ch]"; find . -name "*.cpp"; find . -name "*.java" ;find . -name "*.aidl" ;   )  | cscope -bR -i-
@@ -96,8 +99,8 @@ export CLASSPATH=$CLASSPATH:.
 AND_PATH=/mnt/sdc4/android/ics/src/prebuilt/linux-x86/toolchain/i686-android-linux-4.4.3/bin/
 AND_TOOL_PATH=/mnt/sdc4/android/ics/src/out/host/linux-x86/bin
 export PATH=$PATH:
-export PATH=~/share/bin:$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:
-#export PATH=$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:~/share/bin:
+#if gwj first export PATH=~/share/bin:$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:
+export PATH=$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:~/share/bin:
 
 export c=/mnt/sdc4/android/ics/jb-dev
 export t=$c/out/debug/target/product/tina/symbols/system/bin
@@ -129,7 +132,10 @@ alias vt='vi -t '
 alias gp='grep -Irn '
 alias b='[ -z "`lsmod | grep pcspkr`" ] && sudo modprobe pcspkr; beep -f 1000 -l 500'
 #unalias ls # remove previous definition
-alias lls='ls --color' 
+alias gp='grep --color=auto '
+alias lls='ls --color=auto ' 
+export PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$' 
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 
 alias adb-install="adb connect 192.168.0.10:5555;adb install"
