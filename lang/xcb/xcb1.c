@@ -37,6 +37,8 @@ int main(void)
 	xcb_create_gc(c, g, w, 0, NULL);
 
 	/* create window */
+	int i=0;
+	for (i=0;i <5; i++){
 	w = xcb_generate_id(c);
 	mask = XCB_CW_BACK_PIXEL | XCB_CW_EVENT_MASK;
 	values[0] = s->white_pixel;
@@ -44,12 +46,13 @@ int main(void)
     | XCB_EVENT_MASK_VISIBILITY_CHANGE    
     ;
 	xcb_create_window(c, s->root_depth, w, s->root,
-			10, 10, 100, 100, 1,
+			0, 0, 1000, 800, 1,
 			XCB_WINDOW_CLASS_INPUT_OUTPUT, s->root_visual,
 			mask, values);
 
 	/* map (show) the window */
 	xcb_map_window(c, w); xcb_flush(c);
+	}
 
 	/* event loop */
 	while (!done && (e = xcb_wait_for_event(c))) {

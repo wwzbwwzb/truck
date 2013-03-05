@@ -15,7 +15,8 @@
 
         如过前后两个buffer有不存在的，认为是baddrawable， 为什么我的demo 总是赵不到frontbuffer， get_buffers都不分配。
 
-
+	4. xserver 似乎不会为每个window创建buffer，难道窗口的内容都是通过渲染函数渲染出来的吗？ 合成的过程就不是简单的窗口合成，而是很多窗口才真正绘制出来。
+? 是这样的马?
 
 
 
