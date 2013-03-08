@@ -1,0 +1,31 @@
+
+
+2013-03-08
+	1. property 设置的时机和文件
+	init启动property服务时加载系统的prop文件主要有：
+	见：bionic/libc/include/sys/_system_properties.h
+#define PROP_PATH_RAMDISK_DEFAULT  "/default.prop"  #在initrd 中,最先被加载的属性文件
+#define PROP_PATH_SYSTEM_BUILD     "/system/build.prop"
+#define PROP_PATH_SYSTEM_DEFAULT   "/system/default.prop" #default 可以覆盖build.prop
+#define PROP_PATH_LOCAL_OVERRIDE   "/data/local.prop"  #local 覆盖以上
+
+#define PERSISTENT_PROPERTY_DIR  "/data/property"   最后加载persisit目录下的参数
+
+#define PROP_SERVICE_NAME "property_service"    
+	   不是从init孵化出来的shell，没有 通过mmap方式访问prop，可以通过socket访问
+
+
+普通用户没有权限设置prop， system用户只能设置 net.*  hw.*  debug.* 等参数
+只有特定用户或者 用户组是0的用户才可以访问prop （？ 用户组为0？）
+
+AID_xxx 定义
+AID_ROOT  0
+AID_SYSTEM  1000  #linux 默认也是从1000 开始创建普通用户的，所以1000正好是ubuntu安装创建的第一个用户
+
+
+2. extent ideals:
+   可以通过ramdisk  prop 设置  system.img 所在路径和类型
+
+
+3. 用户定义：system/include/private/android_filesystem_config.h
+
