@@ -18,14 +18,27 @@
 普通用户没有权限设置prop， system用户只能设置 net.*  hw.*  debug.* 等参数
 只有特定用户或者 用户组是0的用户才可以访问prop （？ 用户组为0？）
 
-AID_xxx 定义
-AID_ROOT  0
-AID_SYSTEM  1000  #linux 默认也是从1000 开始创建普通用户的，所以1000正好是ubuntu安装创建的第一个用户
 
 
 2. extent ideals:
    可以通过ramdisk  prop 设置  system.img 所在路径和类型
 
 
-3. 用户定义：system/include/private/android_filesystem_config.h
+3. 用户定义：见system/include/private/android_filesystem_config.h
+AID_xxx 定义
+AID_ROOT  0
+AID_SYSTEM  1000  #linux 默认也是从1000 开始创建普通用户的，所以1000正好是ubuntu安装创建的第一个用户
 
+AID_NET_BT_ADMIN 3001 #只有特定的用户组才可以访问网络，必须将要访问网络的用户添加到用户组
+？  没有/etc/passwd 文件，android如何管理用户组?
+
+#define AID_BLUETOOTH     1002  /* bluetooth subsystem */
+#define AID_GRAPHICS      1003  /* graphics devices */
+#define AID_INPUT         1004  /* input devices */
+#define AID_AUDIO         1005  /* audio devices */
+#define AID_NET_BT_ADMIN  3001  /* bluetooth: create any socket */
+#define AID_NET_BT        3002  /* bluetooth: create sco, rfcomm or l2cap sockets */
+#define AID_INET          3003  /* can create AF_INET and AF_INET6 sockets */
+#define AID_NET_RAW       3004  /* can create raw INET sockets */
+#define AID_APP          10000  /* first app user */
+#define AID_USER        100000  /* offset for uid ranges for each user */
