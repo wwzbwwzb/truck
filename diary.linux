@@ -7,3 +7,9 @@ rm 把空格认为是文件名的分割符，所以面对带有空格的文件�
 find . -name -exec rm '{}' \;
 find . -name -delete
 
+
+====1. 查看线程名称
+/proc/<pid>/task/stat
+top   H
+ps -eLf  amxs
+pmap -d <pid> 列出当前映射的内存大小
