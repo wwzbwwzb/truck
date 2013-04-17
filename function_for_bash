@@ -75,10 +75,11 @@ aptinstall()
 gentags()
 {
   echo "generate tags..."
-#--c++-kinds=+p --fields=+iaS --extra=+q
-( find $1 -name "*.[ch]";  find . -name "*.[ch]"; find . -name "*.cpp" )  | ctags  -L -
+(  find . -name "*.[ch]" -o  -name "*.cpp" )  | 
+ctags --langmap=C++:.inc --c++-kinds=+p --fields=+iaS --extra=+fq --sort=foldcase -L -
+#ctags  -L -
   echo "generate cscope..."
-( find $1 -name "*.[ch]";  find . -name "*.[ch]"; find . -name "*.cpp"; find . -name "*.java" ;find . -name "*.aidl" ;   )  | cscope -bR -i-
+(  find . -name "*.[ch]" -o  -name "*.cpp" -o  -name "*.java" -o  -name "*.aidl" ;   )  | cscope -bR -i-
 }
 
 run()
@@ -97,8 +98,8 @@ export JAVA_HOME=/mnt/sdc4/android/ics/tool/jdk1.6.0_21
 export CLASSPATH=$CLASSPATH:.
 
 AND_PATH=/mnt/sdc4/android/ics/src/prebuilt/linux-x86/toolchain/i686-android-linux-4.4.3/bin/
-AND_TOOL_PATH=/mnt/sdc4/android/ics/src/out/host/linux-x86/bin
-export PATH=$PATH:
+AND_TOOL_PATH=/mnt/sdc4/android/ics/jb-dev/out/host/linux-x86/bin
+export PATH=$PATH:$AND_TOOL_PATH
 #if gwj first export PATH=~/share/bin:$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:
 export PATH=$PATH:$AND_PATH:$JAVA_HOME/bin:~/bin:~/share/bin:
 
@@ -109,6 +110,13 @@ export TOP=$c
 
 cd $c; source ./build/envsetup.sh >>/dev/null >>/dev/null; 
 cd - >>/dev/null
+
+#mm color make
+COff=$'\e[0m'       # Text Reset
+CError=$'\e[1;31m'      # Bold White
+CWarn=$'\e[1;35m'      # Bold White
+kmm(){ mm 2>&1 | sed -e "s/Error.*/${CError}\0${COff}/g" -e "s/: error:.*/${CError}\0${COff}/g" -e "s/: warning:/${CWarn}\0${COff}/g"; }
+
 echo "loading ...."
 }
 
@@ -146,9 +154,13 @@ export x=/mnt/sdc4/xbmctv/cg/xserver
 export cg=/mnt/sdc4/xbmctv/cg/xserver/
 
 #for lua
+load_lua()
+{
 export lua=/mnt/sdc4/truck/lua
-export LUA_CPATH="?.so;/home/gwj/share/lib/lua/5.2/?.so"
-export LUA_PATH="?.lua;/home/gwj/share/share/lua/5.2/?.lua"
+export LUA_CPATH="./?.so;/home/gwj/share/lib/lua/5.2/?.so"
+export LUA_PATH="./?.lua;/home/gwj/share/share/lua/5.2/?.lua"
+export LUA_CPATH="$LUA_CPATH;/usr/lib/i386-linux-gnu/lua/5.1/luasql/?.so"
+}
 
 #for node
 export NODE_PATH=/home/gwj/share/lib/node_modules
@@ -159,11 +171,29 @@ npminstall()
 }
 
 #export v=/mnt/sdc4/xbmctv/tv/v4l-utils-0.8.5
-export m=/mnt/sdc4/xbmctv/cg/mesa
+export m=/mnt/sdc4/xbmctv/cg/mes3
 export a=/mnt/sdc4/truck/mali/kernel
 export TERM=xterm-color
-#export LANG=en_US.utf-8
+export LANG=en_GB.utf-8
 #export LC_ALL=en_US.utf-8
 #export LANGUAGE=en_US.utf-8
 
 [ -z "$GDMSESSION" ] || load_android
+export d=/mnt/sdc4/android/ics/jb-dev/out/debug/target/product/tina/system/bin/drm
+bxcb()
+{
+	[ -z "$1" ] && exit
+	gcc $1 -lxcb-dri2 -lEGL -lGL -lm -lpthread
+}
+
+export s=/home/gwj/svn/upgradeit/trunk/src/UpgradeITUI/
+export PS1="\u@\h \w \$? \$"
+
+#color make
+#没有办法抓到error returned
+COff=$'\e[0m'       # Text Reset
+CError=$'\e[1;31m'      # Bold White
+CWarn=$'\e[1;35m'      # Bold White
+kmm(){ mm 2>&1 | sed -e "s/Error.*/${CError}\0${COff}/g" -e "s/: error:.*/${CError}\0${COff}/g" -e "s/: warning:/${CWarn}\0${COff}/g"; }
+
+br() { gcc -g $1 -o test.exe -lxcb-dri2 -lEGL -lGL -lm -lpthread  -ldrm  2>&1 | sed -e "s/Error.*/${CError}\0${COff}/g" -e "s/: error:.*/${CError}\0${COff}/g" -e "s/: warning:/${CWarn}\0${COff}/g"; ./test.exe; return $ret; }

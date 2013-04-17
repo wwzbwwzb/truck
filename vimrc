@@ -1,10 +1,12 @@
 "2012-08-24
 set viminfo='1000,f1,<500
 
+"2013.1.16 clipboard: "+gp  "*gp access x11 buffers "PRIMARY*  "CUT_BUFFER[]
+"see also x11-selection
 
 "显示函数名称，c/java
 " set verbose=9 可以调试命令
-fun! ShowFuncName()
+fun! ShowFuncName(type)
 	let lnum = line(".")
 	let col = col(".")
 	echohl ModeMsg
@@ -18,13 +20,18 @@ fun! ShowFuncName()
 	  echo getline(search("^[^ \t#/]\\{2}.*[^:]\s*$", 'bW')) 
 	endif
 	echohl None
-"	call search("\\%" . lnum . "l" . "\\%" . col . "c")
+"	call search("\\%" . lnum . "l" . "\\%" . col . "c") "may cause show promot
 	call cursor(lnum,col)
 endfun
 
-map <F12> :call  ShowFuncName() <CR>
-au  CursorMoved *    call  ShowFuncName()
+map <F12> :call  ShowFuncName(0) <CR>
+"au  CursorMoved *    call  ShowFuncName()
+set updatetime=1500 "default 4000
+"添加<CR> 避免出现提示“Press ENTER or type command to continue”
+"au  CursorHold *    call  ShowFuncName(0) 
 
+" 禁止编辑模式
+map <F2> :set modifiable!  <CR>
 
 
 "2010-10-09
@@ -36,9 +43,10 @@ set display=lastline
 "set autochdir
 
 " define the color of Comment
-"hi Comment  term=bold ctermfg=6 guifg=Blue
 hi Identifier ctermfg=LightBlue  
-hi Comment  ctermfg=yellow
+"3hi Comment  ctermfg=yellow
+hi Comment  term=bold ctermfg=6 
+"guifg=Blue
 
 " from chia-I
 "colorscheme delek
@@ -85,10 +93,13 @@ autocmd BufReadPost *
      \   exe "normal! g`\"" |
      \ endif
 
-map <F3> :Tlist<CR>
+"map <F3> :Tlist<CR>
+map <S-F3> :TagbarCurrentTag<CR>
+map <F3> :TagbarToggle<CR>
+"au  CursorHold *    exe TagbarToggle <CR>
 map ts :ts<CR>
-map tn :tn
-map tp :tp
+map tn :tn<CR>
+map tp :tp<CR>
 map J :cn<CR>
 map , :cn<CR>
 map . :cp<CR>
@@ -100,6 +111,7 @@ map q :q<CR>
 if has("cscope")
 "		set csprg=/usr/local/bin/cscope
   map <C-e> :cs find c <cword><CR>
+  map F :cs find f <cfile><CR>
 	set csto=0
 	set cst
 	set nocsverb
@@ -123,5 +135,25 @@ if has("cscope")
 	nmap <C-[>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
 	nmap <C-[>i :cs find i ^<C-R>=expand("<cfile>")<CR>$<CR>
 	nmap <C-[>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+"//	map   F  :cs find f <cfile> 
 endif "cscope 
 
+" OmniCppComplete
+let OmniCpp_NamespaceSearch = 1
+let OmniCpp_GlobalScopeSearch = 1
+let OmniCpp_ShowAccess = 1
+let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
+let OmniCpp_MayCompleteDot = 1 " autocomplete after .
+let OmniCpp_MayCompleteArrow = 1 " autocomplete after ->
+let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
+let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"]
+" automatically open and close the popup menu / preview window
+au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
+set completeopt=menuone,menu,longest,preview
+
+highlight c1 ctermfg=yellow cterm=NONE
+match c1  /\<egl\a*\|\<gl\a*/
+"for vimwiki
+set nocompatible
+filetype plugin on
+syntax on
